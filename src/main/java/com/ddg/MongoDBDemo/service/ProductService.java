@@ -29,4 +29,17 @@ public class ProductService {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    public ResponseEntity<Product> getProductById(String id) {
+       try {
+            Product product = productRepo.findById(id).orElse(null);
+            if (product == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity<>(product, HttpStatus.OK);
+            }
+       } catch (Exception e){
+           return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+       }
+    }
 }
