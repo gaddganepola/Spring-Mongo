@@ -17,7 +17,7 @@ public class ProductService {
     public ResponseEntity<Product> addProduct(Product product) {
         try {
             return new ResponseEntity<>(productRepo.save(product), HttpStatus.CREATED);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -25,7 +25,7 @@ public class ProductService {
     public ResponseEntity<List<Product>> getAllProducts() {
         try {
             return new ResponseEntity<>(productRepo.findAll(), HttpStatus.OK);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -38,8 +38,24 @@ public class ProductService {
             } else {
                 return new ResponseEntity<>(product, HttpStatus.OK);
             }
-       } catch (Exception e){
+       } catch (Exception e) {
            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
        }
+    }
+
+    public ResponseEntity<Product> updateProduct(String id, Product product) {
+        try {
+            Product existingProduct = productRepo.findById(id).orElse(null);
+            if (existingProduct == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                existingProduct.setProductName(product.getProductName());
+                existingProduct.setPrice(product.getPrice());
+                existingProduct.setQuantity(product.getQuantity());
+                return new ResponseEntity<>(productRepo.save(existingProduct), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
