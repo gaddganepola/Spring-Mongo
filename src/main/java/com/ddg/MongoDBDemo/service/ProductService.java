@@ -58,4 +58,19 @@ public class ProductService {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    public ResponseEntity<String> deleteProduct(String id) {
+        try {
+            Product product = productRepo.findById(id).orElse(null);
+            if (product == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                productRepo.delete(product);
+                return new ResponseEntity<>("Product deleted successfully", HttpStatus.OK);
+            }
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
